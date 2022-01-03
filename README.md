@@ -1,4 +1,19 @@
 # M5Core2_SG90_StackChan_VoiceText_Ataru
+
+[@robo8989さんからフォーク](https://github.com/robo8080/M5Core2_SG90_StackChan_VoiceText_Ataru)したものです。  
+PlatformIOを使用していますので、Arduino IDEでコンパイルできない場合があるかもしれません。  
+
+
+## 変更点
+
+- WiFiやVoiceText Web APIサービスの設定をEvn.hファイルに移動しました。  
+  Env.h.sampleファイルをコピーしEnv.hに名称変更して編集してください。
+  
+
+
+以下オリジナルのドキュメントです。
+
+# M5Core2_SG90_StackChan_VoiceText_Ataru
 M5Core2_SG90_StackChan_VoiceText_Ataru
 
 @mongonta555 さんが[ｽﾀｯｸﾁｬﾝ M5GoBottom版組み立てキット](https://raspberrypi.mongonta.com/about-products-stackchan-m5gobottom-version/ "Title")の頒布を始められたので、それに対応したｽﾀｯｸﾁｬﾝファームを作ってみました。<br>

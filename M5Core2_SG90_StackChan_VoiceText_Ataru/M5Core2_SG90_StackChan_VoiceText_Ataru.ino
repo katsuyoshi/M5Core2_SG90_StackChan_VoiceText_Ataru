@@ -29,8 +29,12 @@
 #include "AudioOutputI2SLipSync.h"
 #include "AudioFileSourceVoiceTextStream.h"
 
-const char *SSID = "YOUR_WIFI_SSID";
-const char *PASSWORD = "YOUR_WIFI_PASSWORD";
+// Copy Env.h.sample to Env.h
+// And replace YOUR_WIFI_SSID with SSID name, YOUR_WIFI_PASSWORD with the password.
+#include "Env.h"
+
+const char *SSID = WIFI_SSID;
+const char *PASSWORD = WIFI_PASSWORD;
 
 AudioGeneratorMP3 *mp3;
 AudioFileSourceVoiceTextStream *file;
