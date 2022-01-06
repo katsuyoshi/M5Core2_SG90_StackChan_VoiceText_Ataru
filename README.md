@@ -1,6 +1,6 @@
-# M5Core2_SG90_StackChan_VoiceText_Ataru
+# M5Core2_SG90_StackChan_VoiceText_Ataru forked from @robo8080
 
-[@robo8989さんからフォーク](https://github.com/robo8080/M5Core2_SG90_StackChan_VoiceText_Ataru)したものです。  
+[@robo8080さんからフォーク](https://github.com/robo8080/M5Core2_SG90_StackChan_VoiceText_Ataru)したものです。  
 PlatformIOを使用していますので、Arduino IDEでコンパイルできない場合があるかもしれません。  
 
 
@@ -8,7 +8,9 @@ PlatformIOを使用していますので、Arduino IDEでコンパイルでき�
 
 - WiFiやVoiceText Web APIサービスの設定をEvn.hファイルに移動しました。  
   Env.h.sampleファイルをコピーしEnv.hに名称変更して編集してください。
-  
+- PandFaceとTVFaceを追加しました。
+  Button Aで __あたる__ と __スースー__ を切り替えます。
+  Button Bで __ラム__ と __ブラウン__ を切り替えます。
 
 
 以下オリジナルのドキュメントです。
