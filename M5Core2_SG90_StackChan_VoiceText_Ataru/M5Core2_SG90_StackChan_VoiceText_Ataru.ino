@@ -50,7 +50,7 @@ uint8_t *preallocateBuffer;
 #define AVATAR_RAM          1
 #define AVATAR_STACK        2
 #define AVATAR_SUSU         3
-#define AVATAR_TV           4
+#define AVATAR_BRAUN        4
 #define NUMBER_OF_AVATARS   5
 
 using namespace m5avatar;
@@ -161,7 +161,7 @@ void setup() {
   faces[AVATAR_RAM] = new RamFace();
   faces[AVATAR_STACK] = avatar.getFace();
   faces[AVATAR_SUSU] = new PandaFace();
-  faces[AVATAR_TV] = new TVFace();
+  faces[AVATAR_BRAUN] = new TVFace();
 
   for (int i = 0; i < NUMBER_OF_AVATARS; i++) {
     cps[i] = new ColorPalette();
@@ -178,9 +178,9 @@ void setup() {
   cps[AVATAR_SUSU]->set(COLOR_BACKGROUND, TFT_WHITE);
   cps[AVATAR_SUSU]->set(COLOR_SECONDARY, TFT_WHITE);
 
-  cps[AVATAR_TV]->set(COLOR_PRIMARY, TFT_WHITE);
-  cps[AVATAR_TV]->set(COLOR_BACKGROUND, TFT_BLUE);
-  cps[AVATAR_TV]->set(COLOR_SECONDARY, TFT_YELLOW);
+  cps[AVATAR_BRAUN]->set(COLOR_PRIMARY, TFT_WHITE);
+  cps[AVATAR_BRAUN]->set(COLOR_BACKGROUND, TFT_BLUE);
+  cps[AVATAR_BRAUN]->set(COLOR_SECONDARY, TFT_YELLOW);
 
   avatar.init();
   avatar.setFace(faces[0]);
