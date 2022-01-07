@@ -8,9 +8,42 @@ PlatformIOを使用していますので、Arduino IDEでコンパイルでき�
 
 - WiFiやVoiceText Web APIサービスの設定をEvn.hファイルに移動しました。  
   Env.h.sampleファイルをコピーしEnv.hに名称変更して編集してください。
-- PandFaceとTVFaceを追加しました。
-  Button Aで __あたる__ と __スースー__ を切り替えます。
-  Button Bで __ラム__ と __ブラウン__ を切り替えます。
+- PandFaceとTVFaceを追加しました。<br />
+  Button Aで __あたる__ と __スースー__ を切り替えます。<br />
+  Button Bで __ラム__ と __ブラウン__ を切り替えます。<br />
+- WiFiMultiで複数のWiFiポイントに接続できます。
+
+## WiFi設定
+
+Env.h.sampleコピーしEnv.hファイルを作成します。
+
+```
+// WiFi settings
+#ifndef WIFI_SSID
+#define WIFI_SSID       "YOUR_WIFI_SSID"
+#define WIFI_PASSWORD   "YOUR_WIFI_PASSWORD"
+// If you have another point, uncomment below two lines.
+//#define WIFI_SSID2       "YOUR_WIFI_SSID2"
+//#define WIFI_PASSWORD2   "YOUR_WIFI_PASSWORD2"
+// If you have more points, repeat WIFI_SSID3 and WIFI_PASSWORD3, 4, 5 ...
+#endif
+```
+
+"YOUR_WIFI_SSID"にSSID名を入力し、"YOUR_WIFI_PASSWORD"にパスワードを入力します。  
+WiFiポイントが2つある場合はWIFI_SSID2とWIFI_PASSWORD2の定義のコメントを外し、"YOUR_WIFI_SSID2"、"YOUR_WIFI_PASSWORD2"に入力します。
+3カ所以上ある場合はWIFI_PASSWORD2定義の下に同じ様にWIFI_SSID3、WIFI_PASSWORD3、WIFI_SSID4、WIFI_PASSWORD4...と追加し、M5Core2_SG90_StackChan_VoiceText_Ataru.inoファイルも下の様に```wifiMulti.addAP(WIFI_SSID2, WIFI_PASSWORD2)```の下に追加します。
+
+```
+  wifiMulti.addAP(WIFI_SSID, WIFI_PASSWORD);
+#ifdef WIFI_SSID2
+  wifiMulti.addAP(WIFI_SSID2, WIFI_PASSWORD2);
+#endif
+  wifiMulti.addAP(WIFI_SSID3, WIFI_PASSWORD3);
+  wifiMulti.addAP(WIFI_SSID4, WIFI_PASSWORD4);
+  .
+  .
+```
+
 
 
 以下オリジナルのドキュメントです。

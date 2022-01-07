@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <WiFiMulti.h>
 
 #if defined(ARDUINO_M5STACK_Core2)
   #include <M5Core2.h>
@@ -35,8 +36,7 @@
 // And replace YOUR_WIFI_SSID with SSID name, YOUR_WIFI_PASSWORD with the password.
 #include "Env.h"
 
-const char *SSID = WIFI_SSID;
-const char *PASSWORD = WIFI_PASSWORD;
+WiFiMulti wifiMulti;
 
 AudioGeneratorMP3 *mp3;
 AudioFileSourceVoiceTextStream *file;
@@ -142,8 +142,14 @@ void setup() {
   M5.Lcd.print("Connecting to WiFi");
   WiFi.disconnect();
   WiFi.softAPdisconnect(true);
-  WiFi.mode(WIFI_STA);  WiFi.begin(SSID, PASSWORD);
-  while (WiFi.status() != WL_CONNECTED) {
+  WiFi.mode(WIFI_STA);
+  wifiMulti.addAP(WIFI_SSID, WIFI_PASSWORD);
+#ifdef WIFI_SSID2
+  wifiMulti.addAP(WIFI_SSID2, WIFI_PASSWORD2);
+#endif
+  // If you have more points, repeat the above three lines like WIFI_SSID3, 4, 5 ...
+
+  while (wifiMulti.run() != WL_CONNECTED) {
     delay(250);
     Serial.print(".");
     M5.Lcd.print(".");
