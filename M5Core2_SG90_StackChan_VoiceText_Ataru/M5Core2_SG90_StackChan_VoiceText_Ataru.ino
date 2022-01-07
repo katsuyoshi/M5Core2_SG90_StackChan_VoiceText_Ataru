@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <WiFiMulti.h>
 
 #if defined(ARDUINO_M5STACK_Core2)
   #include <M5Core2.h>
@@ -35,8 +36,7 @@
 // And replace YOUR_WIFI_SSID with SSID name, YOUR_WIFI_PASSWORD with the password.
 #include "Env.h"
 
-const char *SSID = WIFI_SSID;
-const char *PASSWORD = WIFI_PASSWORD;
+WiFiMulti wifiMulti;
 
 AudioGeneratorMP3 *mp3;
 AudioFileSourceVoiceTextStream *file;
@@ -50,7 +50,7 @@ uint8_t *preallocateBuffer;
 #define AVATAR_RAM          1
 #define AVATAR_STACK        2
 #define AVATAR_SUSU         3
-#define AVATAR_TV           4
+#define AVATAR_BRAUN        4
 #define NUMBER_OF_AVATARS   5
 
 using namespace m5avatar;
@@ -142,8 +142,14 @@ void setup() {
   M5.Lcd.print("Connecting to WiFi");
   WiFi.disconnect();
   WiFi.softAPdisconnect(true);
-  WiFi.mode(WIFI_STA);  WiFi.begin(SSID, PASSWORD);
-  while (WiFi.status() != WL_CONNECTED) {
+  WiFi.mode(WIFI_STA);
+  wifiMulti.addAP(WIFI_SSID, WIFI_PASSWORD);
+#ifdef WIFI_SSID2
+  wifiMulti.addAP(WIFI_SSID2, WIFI_PASSWORD2);
+#endif
+  // If you have more points, repeat the above three lines like WIFI_SSID3, 4, 5 ...
+
+  while (wifiMulti.run() != WL_CONNECTED) {
     delay(250);
     Serial.print(".");
     M5.Lcd.print(".");
@@ -161,7 +167,7 @@ void setup() {
   faces[AVATAR_RAM] = new RamFace();
   faces[AVATAR_STACK] = avatar.getFace();
   faces[AVATAR_SUSU] = new PandaFace();
-  faces[AVATAR_TV] = new TVFace();
+  faces[AVATAR_BRAUN] = new TVFace();
 
   for (int i = 0; i < NUMBER_OF_AVATARS; i++) {
     cps[i] = new ColorPalette();
@@ -178,9 +184,9 @@ void setup() {
   cps[AVATAR_SUSU]->set(COLOR_BACKGROUND, TFT_WHITE);
   cps[AVATAR_SUSU]->set(COLOR_SECONDARY, TFT_WHITE);
 
-  cps[AVATAR_TV]->set(COLOR_PRIMARY, TFT_WHITE);
-  cps[AVATAR_TV]->set(COLOR_BACKGROUND, TFT_BLUE);
-  cps[AVATAR_TV]->set(COLOR_SECONDARY, TFT_YELLOW);
+  cps[AVATAR_BRAUN]->set(COLOR_PRIMARY, TFT_WHITE);
+  cps[AVATAR_BRAUN]->set(COLOR_BACKGROUND, TFT_BLUE);
+  cps[AVATAR_BRAUN]->set(COLOR_SECONDARY, TFT_YELLOW);
 
   avatar.init();
   avatar.setFace(faces[0]);
