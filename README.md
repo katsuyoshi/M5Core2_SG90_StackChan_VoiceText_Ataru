@@ -12,6 +12,8 @@ PlatformIOを使用していますので、Arduino IDEでコンパイルでき�
   Button Aで __あたる__ と __スースー__ を切り替えます。<br />
   Button Bで __ラム__ と __ブラウン__ を切り替えます。<br />
 - WiFiMultiで複数のWiFiポイントに接続できます。
+- 時刻を喋る様にしました。<br />
+  Env.hのTIME_ANNOUNCE_INTERVALで喋らせるインターバルを指定します。
 
 ## WiFi設定
 
