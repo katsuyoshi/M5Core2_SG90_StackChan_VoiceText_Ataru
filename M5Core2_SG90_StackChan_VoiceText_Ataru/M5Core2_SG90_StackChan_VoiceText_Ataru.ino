@@ -58,6 +58,7 @@ Avatar avatar;
 Face* faces[NUMBER_OF_AVATARS];
 ColorPalette* cps[NUMBER_OF_AVATARS];
 int avatar_indexes[3] = {0, 1, 2};
+int current_avatar_index = 0;
 
 #define START_DEGREE_VALUE_X 90
 #define START_DEGREE_VALUE_Y 75 //90
@@ -157,6 +158,8 @@ void setup() {
   Serial.println("\nConnected");
   M5.Lcd.println("\nConnected");
   
+  syncTime();
+
   audioLogger = &Serial;
   out = new AudioOutputI2SLipSync();
   out->SetPinout(12, 0, 2);           // ピン配列を指定（BCK, LRCK, DATA)BashCopy
@@ -218,7 +221,67 @@ void VoiceText_tts(char *text,char *tts_parms) {
     delay(100);
     mp3->begin(buff, out);
 }
+
+time_t time_synced_at;
+uint32_t millis_since_time_synced;
+
+// Not sure if WiFiClientSecure checks the validity date of the certificate. 
+// Setting clock just to be sure...
+void syncTime() {
+  configTime(0, 0, "pool.ntp.org");
+
+  Serial.print(F("Waiting for NTP time sync: "));
+  time_t nowSecs = time(nullptr);
+  while (nowSecs < 8 * 3600 * 2) {
+    delay(500);
+    Serial.print(F("."));
+    yield();
+    nowSecs = time(nullptr);
+  }
+
+  Serial.println();
+  struct tm timeinfo;
+  gmtime_r(&nowSecs, &timeinfo);
+  Serial.print(F("Current time: "));
+  Serial.print(asctime(&timeinfo));
+  Serial.print(timeinfo.tm_year);
+
+  time_synced_at = mktime(&timeinfo);
+  millis_since_time_synced = millis();
+}
+
+time_t now() {
+  time_t n = (time_t)((millis() + 9 * 3600 * 1000 - (time_t)millis_since_time_synced) / 1000) + time_synced_at;
+  return n;
+}
+
+void announce_time_if_needed() {
+  static uint32_t st = millis();
+  uint32_t n = millis();
+  if (n - st >= 60000) {
+    time_t t = now();
+    struct tm *t_tm = gmtime(&t);
+    if (TIME_ANNOUNCE_INTERVAL == 0 ||
+        t_tm->tm_min % TIME_ANNOUNCE_INTERVAL == 0) {
+      say_time();
+    }
+    st = n;
+  }
+}
+
+void say_time() {
+  time_t n = now();
+  struct tm *t = gmtime(&n);
+  char msg[64];
+  sprintf(msg, "%d時%d分になりました。", t->tm_hour,t->tm_min);
+  
+  VoiceText_tts(msg, tts_params[current_avatar_index]);
+  avatar.setExpression(Expression::Neutral);
+  Serial.println("mp3 begin");
+}
+
 #endif
+
 
 void loop() {
   int index;
@@ -229,6 +292,7 @@ void loop() {
   {
     index = avatar_indexes[0];
     avatar_indexes[0] = 3 - index;
+    current_avatar_index = index;
     avatar.setFace(faces[index]);
     avatar.setColorPalette(*cps[index]);
     delay(1000);
@@ -241,6 +305,7 @@ void loop() {
   {
     index = avatar_indexes[1];
     avatar_indexes[1] = 5 - index;
+    current_avatar_index = index;
     avatar.setFace(faces[index]);
     avatar.setColorPalette(*cps[index]);
     delay(1000);
@@ -252,6 +317,7 @@ void loop() {
   if (M5.BtnC.wasPressed())
   {
     index = avatar_indexes[2];
+    current_avatar_index = index;
     avatar.setFace(faces[index]);
     avatar.setColorPalette(*cps[index]);
     delay(1000);
@@ -273,7 +339,13 @@ void loop() {
       delete buff;
       Serial.println("mp3 stop");
     }
+
   }
+
+#ifdef USE_VOICE_TEXT
+  announce_time_if_needed();
+#endif
+
 #else
   if (M5.BtnA.wasPressed())
   {
